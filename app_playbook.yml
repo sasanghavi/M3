@@ -52,7 +52,8 @@
       args:
         chdir: /root/M3/app_server
 
- 
     - name: Add New Relic repository
-      script: /root/M3/app_server/setupNR.sh
+      shell: /root/M3/app_server/setupNR.sh
+      args:
+        chdir: /root/M3/app_server/
 
