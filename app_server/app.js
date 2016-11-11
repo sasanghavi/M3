@@ -72,12 +72,12 @@ app.use(function(req, res, next)
 app.get('/', function(req, res) {
   client.get("feature1", function(err,value){ 
     console.log(value);
-    var footer = "<hr/> Request Served by localhost:"+req.socket.server.address().port
+    var footer = "<hr/> Request Served by http://" + myIP + ":"+req.socket.server.address().port
 
     if (value == "true")
-      res.send('<h2>GET_F1!</h2>' + value + footer)
+      res.send('<h2>Hello World!</h2>' + "Feature!!!" + footer)
     else
-      res.send('<h2>GET</h2>' + value + footer)
+      res.send('<h2>Hello World!</h2>' + footer)
   });
 
 });
