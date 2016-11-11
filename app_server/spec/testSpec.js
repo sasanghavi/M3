@@ -8,7 +8,7 @@ var express = require('express')
 // cmd.get('redis-cli -h 159.203.120.47 lindex servers -1', function (data){
 // console.log("data "+ data)  // command output is in stdout
 // });
-var base_url = "http://9.85.138.205:3090"
+var base_url = "http://159.203.120.47:3090"
 //var base_url = "http://localhost:3090/"
 describe("basic server", function() {
   describe("GET /", function() {
