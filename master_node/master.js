@@ -117,9 +117,74 @@ app.get('/deploy', function(req, res) {
 
 					}); 
 
-					// Run Playbook
+				} else {
+					console.log("...");
+					setTimeout(function () {
+			        	client.getIP(dropletId, getIPCallback);
+			    	}, 1000);
+				}
+			}
+
+			// Get IP
+			client.getIP(dropletId, getIPCallback);
+		}
+	});
+});
 
 
+
+
+
+
+
+
+app.get('/canary', function(req, res) {
+    res.send('<h2>Got new Canary code. Deploy!</h2>')
+
+    var name = "Canary" + parseInt(new Date().getTime() / 10000);
+	var region = "nyc2";
+	var image = "centos-6-5-x64";
+	client.createDroplet(name, region, image, function(err, resp, body)
+	{
+		if(!err && resp.statusCode == 202)
+		{
+			var dropletId = resp.body.droplet.id;
+			console.log("Got droplet: " + dropletId + " polling for public IP...");
+
+			// Get IP Handler
+			function getIPCallback(error, response)
+			{
+				var data = response.body;
+				if( (data.droplet.networks.v4.length > 0)  && (data.droplet.status == "active") )
+				{
+					//console.log(data.droplet.networks.v4[0].ip_address);
+					pubIP_DO = data.droplet.networks.v4[0].ip_address;
+
+					// Run Ansible Playbook here
+					console.log("ALL DONE!.." + pubIP_DO + "... Run ansible now!")  
+					invStr = "node0 ansible_ssh_host="+ pubIP_DO +" ansible_ssh_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa\n"
+					fs.writeFile("inventory", invStr, function(err) {
+					    if(err) {
+					        return console.log(err);
+					    }
+					    console.log("Ansible Inventory file generated, running playbook!");
+
+					    // Run playbook
+	  					exec('sleep 30',
+						  function (error, stdout, stderr) {
+						  		console.log("sleep done...")
+
+						      exec('ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i inventory ../canary_playbook.yml',
+							  function (error2, stdout2, stderr2) {
+							    console.log('stdout: ' + stdout2);
+							    console.log('stderr: ' + stderr2);
+							    if (error2 !== null) {
+							      console.log('exec error: ' + error2);
+							    }
+								});
+						});
+
+					}); 
 
 				} else {
 					console.log("...");
@@ -134,6 +199,8 @@ app.get('/deploy', function(req, res) {
 		}
 	});
 });
+
+
 
 
 
