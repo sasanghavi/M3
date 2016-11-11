@@ -28,10 +28,9 @@ We have used Ansible as the Configuration Management Tool and Jenkins as the Bui
  - The other would run on master server and would be responsible to deploy canary builds by creating new droplets.
 
 #### Metrics and alerts
-* The folder named [Monitor](https://github.com/sasanghavi/M3/tree/M3/Monitor) contains the scripts that deal with metrics monitoring
-* We are monitoring two metrics - CPU Utilization and Memory Utilization using psutils library of python. We have two python scripts named [cpu.py](https://github.com/sasanghavi/M3/tree/M3/Monitor/cpuMonitor.py) and [mem.py](https://github.com/sasanghavi/M3/tree/M3/Monitor/memoryMonitor.py)
-* We have set 45% as threshold values for cpu and memory utilization as found [here](https://github.com/sasanghavi/M3/tree/M3/Monitor/mon.sh)
-* We have used SMTP mail for the ability to send email notifications when the metrics exceed threshold values
+* We have used NewRelic for monitoring purposes.
+* Using servers monitoring and setting up alerts policies, we were able to configure metrics like CPU usage/ Memory usage/ Disk IO usage etc. We set alerts if CPU usage > 47% for 5 minutes and mem usage reached 90% for 5 minutes.
+* Using New Relic channels, we were able to configure our email addresses in New Relic. Also, we set up a webhook on our master server which acts as a receiving webhook for the application from NewRelic. After configuring the hook on new relic, we were able to trigger deployments of the server based on the rules set for alerts.
 
 #### Triggered Autoscaling of production environment
 * As an extension of the monitoring scripts, we have included Autoscaling service inside the mon.sh file.
