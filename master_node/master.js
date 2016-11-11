@@ -12,6 +12,8 @@ var app = express()
 
 var redisIP = '127.0.0.1'
 var redis_client = redis.createClient(6379, redisIP, {})
+var redis_client_static = redis.createClient(6379, '159.203.120.47', {})
+
 
 
 ///////// SELF IP //////////////
@@ -51,6 +53,12 @@ fs.unlink('/root/redisIP', function(err){
         if (err) throw err;
         console.log('file saved');
     });
+
+    // Save host IP for jenkins
+    redis_client_static.set("masterIP", myIP, function (err, value) {
+    	//
+    });
+
 });
 
 
