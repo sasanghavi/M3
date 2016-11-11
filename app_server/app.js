@@ -8,15 +8,26 @@ var httpProxy = require('http-proxy')
 var app = express()
 // REDIS
 
-var redisIP
+var redisIP;
+var client;
 fs.readFile('/root/redisIP', 'utf8', function (err,data) {
   if (err) {
     return console.log(err);
   }
   console.log("read this:" + data);
   redisIP = data;
+  client = redis.createClient(6379, redisIP, {})
+
+  // HTTP SERVER
+  var server = app.listen(3000, function () {
+    var host = server.address().address
+    var port = server.address().port
+
+    client.lpush("servers", "http://"+myIP+":"+port , function(err, data){
+      console.log('Example app listening at http://%s:%s', myIP, port)
+    });
+  });
 });
-var client = redis.createClient(6379, redisIP, {})
 
 var options = {};
 
@@ -62,16 +73,3 @@ app.get('/', function(req, res) {
   res.send('<h2>Hello World,</h2>' + myIP)  
 });
 
-
-
-// HTTP SERVER
-var server = app.listen(3000, function () {
-
-  var host = server.address().address
-  var port = server.address().port
-
-  client.lpush("servers", "http://"+myIP+":"+port , function(err, data){
-      console.log('Example app listening at http://%s:%s', myIP, port)
-  });
-
-});
