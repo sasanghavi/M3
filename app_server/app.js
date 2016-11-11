@@ -8,7 +8,14 @@ var httpProxy = require('http-proxy')
 var app = express()
 // REDIS
 
-var redisIP = '104.131.119.23'
+var redisIP
+fs.readFile('/root/redisIP', 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  console.log("read this:" + data);
+  redisIP = data;
+});
 var client = redis.createClient(6379, redisIP, {})
 
 var options = {};
