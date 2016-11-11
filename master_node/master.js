@@ -11,7 +11,7 @@ var app = express()
 // REDIS
 
 var redisIP = '127.0.0.1'
- redis.createClient(6379, redisIP, {})
+var redis_client = redis.createClient(6379, redisIP, {})
 
 
 ///////// SELF IP //////////////
@@ -82,6 +82,11 @@ app.get('/deploy', function(req, res) {
 			var dropletId = resp.body.droplet.id;
 			console.log("Got droplet: " + dropletId + " polling for public IP...");
 
+		    redis_client.lpush("reservations", dropletId, function(err,value){
+		    	// add ids to DO for delete
+		    });
+
+
 			// Get IP Handler
 			function getIPCallback(error, response)
 			{
@@ -150,6 +155,9 @@ app.get('/canary', function(req, res) {
 		{
 			var dropletId = resp.body.droplet.id;
 			console.log("Got droplet: " + dropletId + " polling for public IP...");
+			redis_client.lpush("reservations_canary", dropletId, function(err,value){
+		    	// add ids to DO for delete
+		    });
 
 			// Get IP Handler
 			function getIPCallback(error, response)
