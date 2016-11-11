@@ -75,9 +75,9 @@ app.get('/', function(req, res) {
     var footer = "<hr/> Request Served by http://" + myIP + ":"+req.socket.server.address().port
 
     if (value == "true")
-      res.send('<h2>Hello World!</h2>' + "Feature!!!" + footer)
+      res.send('<h2>Hello World!</h2>' + "Feature!!! - Canary" + footer)
     else
-      res.send('<h2>Hello World!</h2>' + footer)
+      res.send('<h2>Hello World! - Canary</h2>' + footer)
   });
 
 });
