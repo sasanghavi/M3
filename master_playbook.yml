@@ -56,7 +56,7 @@
 
     # Install Ansible
     - name: Add EPEL repo
-      shell: rpm -iUvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-8.noarch.rpm
+      shell: rpm -iUvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 
     - name: Install Ansible
       shell: yum install -y ansible

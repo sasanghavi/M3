@@ -77,7 +77,10 @@ app.get('/', function(req, res) {
 });
 
 
-app.get('/deploy', function(req, res) {
+app.get('/deploy', deployCallback);
+app.post('/deploy', deployCallback);
+
+function deployCallback(req, res) {
     res.send('<h2>Got new code. Deploy!</h2>')
 
     var name = "App" + parseInt(new Date().getTime() / 10000);
@@ -142,9 +145,7 @@ app.get('/deploy', function(req, res) {
 			client.getIP(dropletId, getIPCallback);
 		}
 	});
-});
-
-
+}
 
 
 
