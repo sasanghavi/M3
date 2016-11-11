@@ -37,15 +37,12 @@ We have used Ansible as the Configuration Management Tool and Jenkins as the Bui
 
 #### Feature Flags
 * We have used a Global Redis Store to maintain the value of feature flag setting. We used another Digital Ocean droplet as the Redis Server by installing Redis as follows `apt-get install redis-server`. Further modified the file `/etc/redis/redis.conf` and updated the value `bind 127.0.0.1` to `bind 0.0.0.0` to set up remote access to redis server on port 6379
-* We have created another [node js app](https://github.com/sasanghavi/M3/tree/M3/FeatureFlag) running at http://< REDIS_IP>:3001` would toggle the value of feature flag. This flag value will be accessed in Production Server by our [app](https://github.com/sasanghavi/M3/tree/M3/app-server/app.js) to provide access to the functionality of `set/get tokens`
-* By default, the feature flag would be set to true, thus giving access to set/get functionality on prod server
-* Every request sent to http://< REDIS_IP>:3001/feature would toggle the flag value, thereby enabling or disabling the feature in production
+* We have created the feature flag functionality for both deploy and canary. We set the feature flag using redis cli and then, get the value of the flag inside the server. Based on the flag value, we display different messages to the user on accessing the / endpoint, which would toggle the message between `Hello World! Feature!!!` and `Hello World!`for application server and `Hello World! Feature!!! - Canary` and `Hello World! - Canary` for the canary branch.
 
 #### Canary releasing
-* We have a master server which can create canary instances. We have a branch named 'canary' for canary release. The process for spinning up a droplet, automatic configuration management and triggered remote deployments for this server are identical to the actual master server as mentioned in first two steps. The branch contents can be viewed [here](https://github.com/sasanghavi/M3/tree/canary)
+* We have a branch named 'canary' for canary release. The process for spinning up a droplet, automatic configuration management and triggered remote deployments for this server are identical to the actual master server as mentioned in first two steps
 * Canary Release - Any changes in the branch displayed on the canary deployments. [app](https://github.com/sasanghavi/M3/tree/Canary/app-server/app.js)
-* We created an http proxy server on master droplet that would handle routing to Master and Canary Servers in a ratio of 2:1.
-* Further, we have used the same global redis store to store the value of whether an alert has been raised or not on the canary server. When the [monitoring script](https://github.com/sasanghavi/M3/tree/M3/Monitor/mon.sh) is invoked, it checks if values are above threshold. If yes, the value is stored in redis through [redis client](https://github.com/sasanghavi/M3/tree/M3/redisAlert.js). This value is used by the proxy server to determine if alert is yes or no. If alert is yes, then traffic will be routed to master server instead of Canary, thus sending all requests to only master
+* We have created a http proxy server on master droplet that would handle routing to Application server and Canary Servers based on the number of available servers in master.
 
 ### Screencast
 
