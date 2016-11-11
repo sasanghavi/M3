@@ -37,10 +37,7 @@ We have used Ansible as the Configuration Management Tool and Jenkins as the Bui
 
 #### Feature Flags
 * We have used a Global Redis Store to maintain the value of feature flag setting. We used another Digital Ocean droplet as the Redis Server by installing Redis as follows `apt-get install redis-server`. Further modified the file `/etc/redis/redis.conf` and updated the value `bind 127.0.0.1` to `bind 0.0.0.0` to set up remote access to redis server on port 6379
-* We have created another [node js app](https://github.com/sasanghavi/M3/tree/M3/FeatureFlag) running at http://< REDIS_IP>:3001` would toggle the value of feature flag. This flag value will be accessed in Production Server by our [app](https://github.com/sasanghavi/M3/tree/M3/app-server/app.js) to provide access to the functionality of `set/get tokens`
-* By default, the feature flag would be set to true, thus giving access to set/get functionality on prod server
-* Every request sent to http://< REDIS_IP>:3001/feature would toggle the flag value, thereby enabling or disabling the feature in production
-
+* We have created the feature flag functionality for both deploy and canary. We set the feature flag using redis cli and then, get the value of the flag inside the server. Based on the flag value, we display different messages to the user on accessing the / endpoint, which would toggle the message between `Hello World!</h2>' + "Feature!!!"` and `Hello World!</h2>'`for application server and `Hello World!</h2>' + "Feature!!! - Canary"` and `Hello World! - Canary</h2>'` for the canary branch.
 #### Canary releasing
 * We have a master server which can create canary instances. We have a branch named 'canary' for canary release. The process for spinning up a droplet, automatic configuration management and triggered remote deployments for this server are identical to the actual master server as mentioned in first two steps. The branch contents can be viewed [here](https://github.com/sasanghavi/M3/tree/canary)
 * Canary Release - Any changes in the branch displayed on the canary deployments. [app](https://github.com/sasanghavi/M3/tree/Canary/app-server/app.js)
