@@ -10,7 +10,14 @@ const exec = require('child_process').exec;
 var app = express()
 // REDIS
 
-var redisIP = '127.0.0.1'
+var redisIP;  //'104.131.164.76'
+fs.readFile('/root/redisIP', 'utf8', function (err,data) {
+  if (err) {
+    return console.log(err);
+  }
+  console.log("read this:" + data);
+  redisIP = data;
+});
 var client = redis.createClient(6379, redisIP, {})
 
 
@@ -47,7 +54,7 @@ fs.unlink('/root/redisIP', function(err){
         throw err;
 
     var options = { flag : 'w' };
-    fs.writeFile('/root/redisIP', ""+redisIP , options, function(err) {
+    fs.writeFile('/root/redisIP', ""+ myIP , options, function(err) {
         if (err) throw err;
         console.log('file saved');
     });
