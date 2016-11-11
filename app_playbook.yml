@@ -30,7 +30,7 @@
 
     # Copy RedisIP
     - name: Copy redis IP
-      copy: src=/root/redisIP dest=/root/redisIP
+      copy: copy: src=/root/redisIP dest=/root/redisIP owner=root group=root mode=0644
 
     # Pull latesest STABLE code
     - name: Pull Latest code from GIT
