@@ -72,7 +72,7 @@ app.get('/', function(req, res) {
 app.get('/deploy', function(req, res) {
     res.send('<h2>Got new code. Deploy!</h2>')
 
-    var name = "App";
+    var name = "App" + parseInt(new Date().getTime() / 10000);
 	var region = "nyc2";
 	var image = "centos-6-5-x64";
 	client.createDroplet(name, region, image, function(err, resp, body)
