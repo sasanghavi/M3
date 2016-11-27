@@ -10,13 +10,14 @@ var app = express()
 
 var redisIP;
 var redis_client;
-//fs.readFile('/root/redisIP', 'utf8', function (err,data) {
-//  if (err) {
-//    return console.log(err);
-//  }
-//  console.log("read this:" + data);
-//  });
-redisIP = "159.203.120.47";
+fs.readFile('/root/redisIP', 'utf8', function (err,data) {
+ if (err) {
+   return console.log(err);
+ }
+ console.log("read this:" + data);
+ redisIP = data;
+
+  //redisIP = "159.203.120.47";
   redis_client = redis.createClient(6379, redisIP, {})
 
   // HTTP SERVER
@@ -28,7 +29,7 @@ redisIP = "159.203.120.47";
       console.log('Example app listening at http://%s:%s', myIP, port)
     });
   });
-//});
+});
 console.log("IP : "+myIP)
 var options = {
 };
