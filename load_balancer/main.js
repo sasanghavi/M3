@@ -1,3 +1,4 @@
+var request = require('request');
 //var nr = require('newrelic')
 var redis = require('redis')
 var multer  = require('multer')
@@ -72,6 +73,23 @@ var proxyServer  = http.createServer(function(req, res)
           client.keys('*', function (err, keys) {
           if (err) return console.log("Error keys: "+err);
           if (keys.length>3) {
+
+            var notif = "`DDoS Attack` signature detected! ("
+            notif += keys.length + " requests/min) \n "
+            notif += "Targetted resource: " + map.get(dbNum)
+            notif += "\n <https://alert-system.com/alerts/1234|Ignore> | <https://alert-system.com/alerts/1234|Move Resource to CDN>"
+
+            request({
+              uri: "https://hooks.slack.com/services/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",
+              method: "POST",
+              json:{
+                "channel": "#general",
+                "username": "DDoS",
+                "text": notif,
+                "icon_emoji": ":ghost:"
+              }
+            });
+
             console.log("Trigger slack message. Possible ddos attack at "+map.get(dbNum)+ " endpoint")
             client.del(dateNow)
           };
