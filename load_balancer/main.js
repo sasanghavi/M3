@@ -15,7 +15,7 @@ var proxy   = httpProxy.createProxyServer(options);
 
 var proxyServer  = http.createServer(function(req, res)
 {
-    console.log("Got Request");
+    console.log("Got Request for: " + req.url);
     client.lrange("servers", 0, -1, function(err,value){
 
         var rand =  Math.floor(Math.random()*value.length);
