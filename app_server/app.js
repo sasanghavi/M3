@@ -79,8 +79,23 @@ app.get('/', function(req, res) {
 
     if (value == "true")
       res.send('<h2>Hello World!</h2>' + "Feature!!!" + footer)
-    else
-      res.send('<h2>Hello World!</h2>' + footer)
+    else {
+      redis_client.get("big_file", function(err,value){ 
+
+        var body = '<h2>Hello World!</h2>';
+        body += '' + value + '<br/>';
+        body += 'Link to Reseource 1 (12 KB): <a href="small_file.txt">hello World</a> <br/>'
+
+        if (value != null)
+          body += 'Link to Reseource 2 (3 MB): <a href="' + value + '">prospectus.pdf</a>'
+        else
+          body += 'Link to Reseource 2 (3 MB): <a>prospectus.pdf</a>'
+        
+        res.send(body + footer);
+      });
+
+
+    }
   });
 
 });
