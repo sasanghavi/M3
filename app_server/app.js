@@ -87,9 +87,7 @@ app.get('/', function(req, res) {
       redis_client.get("big_file", function(err,value){ 
 
         var body = '<h2>Hello World!</h2>';
-        body += '' + value + '<br/>';
         body += 'Link to Reseource 1 (12 KB): <a href="res/hello.txt">hello-world.txt</a> <br/>'
-
         if (value != null)
           body += 'Link to Reseource 2 (3 MB): <a href="' + value + '">prospectus.pdf</a>'
         else
