@@ -20,6 +20,10 @@ fs.readFile('/root/redisIP', 'utf8', function (err,data) {
   //redisIP = "159.203.120.47";
   redis_client = redis.createClient(6379, redisIP, {})
 
+  // initialize links
+  redis_client.set("big_file", "res/big.pdf", function(err,data){
+  });
+
   // HTTP SERVER
   var server = app.listen(3090, function () {
     var host = server.address().address
@@ -84,7 +88,7 @@ app.get('/', function(req, res) {
 
         var body = '<h2>Hello World!</h2>';
         body += '' + value + '<br/>';
-        body += 'Link to Reseource 1 (12 KB): <a href="small_file.txt">hello World</a> <br/>'
+        body += 'Link to Reseource 1 (12 KB): <a href="res/hello.txt">hello-world.txt</a> <br/>'
 
         if (value != null)
           body += 'Link to Reseource 2 (3 MB): <a href="' + value + '">prospectus.pdf</a>'
@@ -97,6 +101,7 @@ app.get('/', function(req, res) {
 
     }
   });
-
 });
 
+// serve static files in the res folder
+app.use('/res', express.static('res'));

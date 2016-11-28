@@ -16,10 +16,11 @@ var proxy   = httpProxy.createProxyServer(options);
 
 var map = new HashMap();
 map.set(1, '/');
-map.set(2, '/small_file');
-map.set(3, '/large_pdf');
+map.set(2, '/res/big.pdf');
+map.set(3, '/res/hello.txt');
 map.set(4, '/recent');
 map.set(5, '/listservers');
+map.set(6, 'default');
 
 
 var proxyServer  = http.createServer(function(req, res)
@@ -43,14 +44,14 @@ var proxyServer  = http.createServer(function(req, res)
         });
 
         var dateNow = Date.now()
-        var dbNum = 0
+        var dbNum = 6      // default
         if(req.url == '/'){
           dbNum = 1
         }
-        else if(req.url == '/set'){
+        else if(req.url == '/res/big.pdf'){
           dbNum = 2
         }
-        else if(req.url == '/get'){
+        else if(req.url == '/res/hello.txt'){
           dbNum = 3
         }
         else if(req.url == '/recent'){
