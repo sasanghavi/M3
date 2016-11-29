@@ -77,9 +77,9 @@ var proxyServer  = http.createServer(function(req, res)
             var notif = "`DDoS Attack` signature detected! ("
             notif += keys.length + " requests/min) \n "
             notif += "Targetted resource: " + map.get(dbNum)
-            notif += "\n <http://192.241.179.54:8080/|Ignore> |" 
-            notif += "<http://192.241.179.54:8080/shutdown|Pull down target resource>"
-            notif += "| <http://192.241.179.54:8080/cdn|Migrate resource to CDN>"
+            notif += "\n <http://192.241.179.54:8080/|Ignore> | "
+            notif += "<http://192.241.179.54:8080/shutdown|Pull down target resource> "
+            notif += " | <http://192.241.179.54:8080/cdn|Migrate resource to CDN>"
             request({
               uri: "https://hooks.slack.com/services/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",
               method: "POST",
