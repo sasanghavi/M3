@@ -101,5 +101,21 @@ app.get('/', function(req, res) {
   });
 });
 
+app.get('/shutdown', function(req, res) {
+    console.log("pulling down res");
+    redis_client.del("big_file", function(err,data){
+      //
+    });
+    res.send("Quarantine Mode!");
+});
+
+app.get('/cdn', function(req, res) {
+    console.log("pulling down res");
+      redis_client.set("big_file", "http://s3.aws.com/res/big.pdf", function(err,data){
+        //
+      });
+    res.send("Quarantine Mode!");
+});
+
 // serve static files in the res folder
 app.use('/res', express.static('res'));

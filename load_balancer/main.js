@@ -68,7 +68,7 @@ var proxyServer  = http.createServer(function(req, res)
           if(err) return console.log("Error select: "+err);
           
           client.set(dateNow,0)
-          client.expire(dateNow, 70)
+          client.expire(dateNow, 15)
           
           client.keys('*', function (err, keys) {
           if (err) return console.log("Error keys: "+err);
@@ -77,8 +77,9 @@ var proxyServer  = http.createServer(function(req, res)
             var notif = "`DDoS Attack` signature detected! ("
             notif += keys.length + " requests/min) \n "
             notif += "Targetted resource: " + map.get(dbNum)
-            notif += "\n <https://alert-system.com/alerts/1234|Ignore> | <https://alert-system.com/alerts/1234|Move Resource to CDN>"
-
+            notif += "\n <http://192.241.179.54:8080/|Ignore> |" 
+            notif += "<http://192.241.179.54:8080/shutdown|Pull down target resource>"
+            notif += "| <http://192.241.179.54:8080/cdn|Migrate resource to CDN>"
             request({
               uri: "https://hooks.slack.com/services/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",
               method: "POST",
@@ -92,6 +93,7 @@ var proxyServer  = http.createServer(function(req, res)
 
             console.log("Trigger slack message. Possible ddos attack at "+map.get(dbNum)+ " endpoint")
             client.del(dateNow)
+            client.flushdb()
           };
           // for(var i = 0, len = keys.length; i < len; i++) {
           // console.log(keys[i]);
